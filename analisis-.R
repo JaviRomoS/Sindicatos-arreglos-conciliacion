@@ -44,6 +44,7 @@ modelo_stats <- function(modelo) {
   )
 }
 
+
 # =========================================================================
 # 5. Modelos GUARDERIAS ---------------------------------------------------
 # =========================================================================
@@ -130,7 +131,7 @@ screenreg(list(m1a, m2a),
 # 
 #  summary(med_salacuna_legal)
 
-   #  Probabilidades predichas (para ver cuánto aumentan las probabilidades de existir sala cuna a medida que aumenta la densidad sindical en modelos sin y con la incorporacion del mediador)
+   #  Probabilidades predichas (para ver cuánto aumentan las probabilidades de existir guarderia a medida que aumenta la densidad sindical en modelos sin y con la incorporacion del mediador)
 
 ggpredict(
   m1a,
@@ -168,7 +169,7 @@ screenreg(list(m1a, m3a),
           single.row = TRUE,
           include.aic = TRUE, include.bic = TRUE, include.loglik = TRUE, include.nobs = TRUE)
 
-# Se rechaza la hipotesis 3 para el modelo de sala cuna, ya que no hay efecto de conflicto disruptivo sobre densidad sindical
+# Se rechaza la hipotesis 3 para el modelo de guarderia, ya que no hay efecto de conflicto disruptivo sobre densidad sindical
 
 # =========================================================================
 # 6. Modelos TELETRABAJO --------------------------------------------------
@@ -266,12 +267,33 @@ modelo_stats(m3b)
 # 7. Tablas ---------------------------------------------------------------
 # =========================================================================
 
+## 7.2. Tablas descriptivas
+
+view(dfSummary(filt_data, headings=FALSE, graph.col = FALSE)) # Muestra guarderias
+
+view(dfSummary(data, headings=FALSE, graph.col = FALSE)) # Muestra teletrabajo
+
+## 7.1. Tablas regresion
+
 htmlreg(
   list(m1a, m2a, m3a, m1b, m2b, m3b),
   custom.model.names = c("Modelo 1a", "Modelo 2a", "Modelo 3a", "Modelo 1b", "Modelo 2b", "Modelo 3b"),
   digits = 3, 
   single.row = TRUE,
   include.aic = TRUE, include.bic = TRUE, include.loglik = TRUE, include.nobs = TRUE,
-  file = "Output/tabla2_paper.html", 
+  file = "Output/tables/tabla2_paper.html", 
   doctype = TRUE, 
   html.tag = TRUE)
+
+## 7.2. Tabla anexa
+
+htmlreg(
+  list(model2a_1, model3a_1, model2b_1, model3b_1),
+  custom.model.names = c("Modelo 2a_1", "Modelo 3a_1", "Modelo 2b_1", "Modelo 3b_1"),
+  digits = 3, 
+  single.row = TRUE,
+  include.aic = TRUE, include.bic = TRUE, include.loglik = TRUE, include.nobs = TRUE,
+  file = "Output/tables/tabla-anexa_paper.html", 
+  doctype = TRUE, 
+  html.tag = TRUE)
+
