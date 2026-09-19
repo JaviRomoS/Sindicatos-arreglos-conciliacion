@@ -6,7 +6,7 @@ options(scipen = 999)
 # =========================================================================
 
 library(pacman)
-pacman::p_load(tidyverse, haven, sjmisc, sjPlot, summarytools, texreg, ggplot2, ggeffects, mediation )
+pacman::p_load(tidyverse, haven, sjmisc, sjPlot, summarytools, texreg, ggplot2, htmltools,ggeffects, mediation )
 
 # =========================================================================
 # Abrir bases -------------------------------------------------------------
@@ -86,9 +86,9 @@ plot_m1a <- ggplot(
   theme_bw(base_size = 16) +
   theme(
     legend.position = "none",
-    plot.title = element_text(face = "plain", size = 18, hjust = 0), 
-    axis.title.x = element_text(size = 16, margin = margin(t = 12)), 
-    axis.text = element_text(size = 14),                             
+    plot.title = element_text(face = "plain", size = 25, hjust = 0), 
+    axis.title.x = element_text(size = 18, margin = margin(t = 12)), 
+    axis.text = element_text(size = 18),                             
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "white", color = NA),
     panel.border = element_rect(color = "grey70", fill = NA, linewidth = 0.5))
@@ -128,10 +128,15 @@ screenreg(list(m1a, m2a),
 #   mediator = "conflicto_legal",
 #   boot = TRUE,
 #   sims = 5000)
-# 
-#  summary(med_salacuna_legal)
 
-   #  Probabilidades predichas (para ver cuánto aumentan las probabilidades de existir guarderia a medida que aumenta la densidad sindical en modelos sin y con la incorporacion del mediador)
+  # mediation <- summary(med_salacuna_legal)
+  # mediation <- paste(capture.output(mediation), collapse = "\n")
+
+  # save_html(
+  #   htmltools::tags$pre(capture.output(mediation)),
+  #   file = "output/tables/mediation_salacuna_legal.html")
+  
+   # Probabilidades predichas (para ver cuánto aumentan las probabilidades de existir guarderia a medida que aumenta la densidad sindical en modelos sin y con la incorporacion del mediador)
 
 ggpredict(
   m1a,
@@ -144,6 +149,14 @@ ggpredict(
   terms = "densidad_sindical [0:100 by=0.25]",
   condition = list(tamano_empresa = 3,
                    actividad_economica = "Enseñanza")) # Incluyendo conflicto legal
+
+   # Probabilidades predichas (cuanto aumenta la probabilidad de tener guardería según el aumento de la movilizacion legal)
+
+ggpredict(
+  m2a,
+  terms = "conflicto_legal",
+  condition = list(tamano_empresa = 3,
+                   actividad_economica = "Enseñanza"))
 
    ## 5.3. HIPOTESIS 3 ----------------------------------------------------
 
@@ -185,6 +198,13 @@ summary(m1b)
 
 modelo_stats(m1b)
 
+# Probabilidades predichas
+
+ggpredict(
+  m1b,
+  terms = "densidad_sindical [0:100 by=0.25]",
+  condition = list(tamano_empresa = 3,
+                   actividad_economica = "Enseñanza")) # Sin incluir conflicto legal
 # Grafico probabilidades predichas modelo 1b
 
 plot_m1b <- ggplot(
@@ -212,9 +232,9 @@ plot_m1b <- ggplot(
   theme_bw(base_size = 16) +   
   theme(
     legend.position = "none",
-    plot.title = element_text(face = "plain", size = 18, hjust = 0),
-    axis.title.x = element_text(size = 16, margin = margin(t = 12)),
-    axis.text = element_text(size = 14),                             
+    plot.title = element_text(face = "plain", size = 25, hjust = 0), 
+    axis.title.x = element_text(size = 18, margin = margin(t = 12)), 
+    axis.text = element_text(size = 18),                             
     panel.grid.minor = element_blank(),
     panel.background = element_rect(fill = "white", color = NA),
     panel.border = element_rect(color = "grey70", fill = NA, linewidth = 0.5))
